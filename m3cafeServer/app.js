@@ -7,6 +7,9 @@ var logger = require('morgan');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 
+var passport = require('passport');
+var authenticate = require('./authenticate');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -14,18 +17,24 @@ var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 
+// for token authentication - config
+var config = require('./config');
+
+const url = config.mongoUrl;
+
 const mongoose = require('mongoose');
 
 const Dishes = require('./models/dishes');
 const Leaders = require('./models/leaders');
 const Promotions = require('./models/promotions');
 
-const url = 'mongodb://localhost:27017/conFusion';
+// const url = 'mongodb://localhost:27017/m3cafe';
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
     console.log("Connected correctly to server");
 }, (err) => { console.log(err); });
+
 
 var app = express();
 
@@ -46,10 +55,29 @@ app.use(session({
   store: new FileStore()
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // these routes are needed to be defined for auth function to work
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+ /* after config.js is added
+// with passport before token authentication
+function auth (req, res, next) {
+  console.log(req.user);
+
+  if (!req.user) {
+    var err = new Error('You are not authenticated!');
+    err.status = 403;
+    next(err);
+  }
+  else {
+        next();
+  }
+}
+*/
+/* before passport
 function auth (req, res, next) {
   console.log(req.session);
 
@@ -68,8 +96,10 @@ function auth (req, res, next) {
     }
   }
 }
+*/
 
-app.use(auth);
+// after config.js is added removed 
+// app.use(auth);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
