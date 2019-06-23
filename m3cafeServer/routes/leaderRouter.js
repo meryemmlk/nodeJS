@@ -8,7 +8,7 @@ const leaderRouter = express.Router();
 
 leaderRouter.use(bodyParser.json());
 
-promoRouter.route('/')
+leaderRouter.route('/')
 .get((req,res,next) => {
     Leaders.find({})
     .then((leaders) => {
