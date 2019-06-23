@@ -15,13 +15,20 @@ var commentSchema = new Schema({
         type: String,
         required: true
     },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
+    /* before mongoose population
     author:  {
         type: String,
         required: true
     }
+    */ 
 }, {
     timestamps: true
 });
+
 
 const dishSchema = new Schema({
     name: {
