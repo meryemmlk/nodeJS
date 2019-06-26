@@ -17,6 +17,7 @@ var usersRouter = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
+const uploadRouter = require('./routes/uploadRouter');
 
 // for token authentication - config
 var config = require('./config');
@@ -28,6 +29,7 @@ const mongoose = require('mongoose');
 const Dishes = require('./models/dishes');
 const Leaders = require('./models/leaders');
 const Promotions = require('./models/promotions');
+
 
 // const url = 'mongodb://localhost:27017/m3cafe';
 const connect = mongoose.connect(url);
@@ -73,6 +75,7 @@ app.use(passport.session());
 // these routes are needed to be defined for auth function to work
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/imageUpload',uploadRouter);
 
  /* after config.js is added
 // with passport before token authentication
